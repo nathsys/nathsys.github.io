@@ -42,7 +42,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--body);
-  font: 400 15px/1.65 "Lilex", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font: 400 15px/1.55 "Lilex", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 main, footer {
@@ -51,7 +51,7 @@ main, footer {
   padding: 0 20px;
 }
 
-main { padding-top: 64px; }
+main { padding-top: 40px; }
 
 ::selection { background: var(--accent); color: var(--bg); }
 
@@ -74,7 +74,7 @@ h1 {
 }
 
 .subtitle {
-  margin: 14px 0 0;
+  margin: 10px 0 0;
   font-size: 16px;
   color: var(--muted);
 }
@@ -83,32 +83,54 @@ h1 {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
   gap: 8px 24px;
-  margin-top: 26px;
-  padding-top: 14px;
+  margin-top: 16px;
+  padding-top: 12px;
   border-top: 1px solid var(--faint);
   font-size: 14px;
 }
 
-.links { display: flex; flex-wrap: wrap; gap: 6px 20px; }
-.links a { font-weight: 700; }
+.links { display: flex; flex-wrap: wrap; gap: 6px 26px; }
+.links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+}
+.icon { flex: none; color: var(--text); }
 
 .status { margin: 0; color: var(--text); }
+.status::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 9px;
+  vertical-align: 1px;
+  background: var(--accent);
+  animation: blink 2.4s ease-in-out infinite;
+}
+
+@keyframes blink { 50% { opacity: 0.25; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .status::before { animation: none; }
+}
 
 /* Sections */
-section { margin-top: 52px; }
+section { margin-top: 26px; }
 
 h2 {
   font-size: 21px;
-  padding-bottom: 10px;
-  margin-bottom: 20px;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
   border-bottom: 1px solid var(--faint);
 }
 
 p { margin: 0; }
 
-.entry + .entry { margin-top: 26px; }
+.entry + .entry { margin-top: 18px; }
 
 .head {
   display: flex;
@@ -127,9 +149,9 @@ h3 .dim { font-size: 14px; }
 .sub, .tags { margin-top: 4px; font-size: 14px; color: var(--muted); }
 .dim { color: var(--muted); font-weight: 400; }
 
-ul { list-style: none; margin: 12px 0 0; padding: 0; }
+ul { list-style: none; margin: 8px 0 0; padding: 0; }
 li { position: relative; padding-left: 22px; }
-li + li { margin-top: 6px; }
+li + li { margin-top: 4px; }
 li::before {
   content: "";
   position: absolute;
@@ -140,6 +162,30 @@ li::before {
   background: var(--accent);
 }
 
+/* Citation: a native disclosure, so it works without JavaScript. */
+.cite { margin-top: 8px; font-size: 13px; }
+.cite summary {
+  display: inline-block;
+  cursor: pointer;
+  color: var(--accent);
+  font-weight: 700;
+  list-style: none;
+}
+.cite summary::-webkit-details-marker { display: none; }
+.cite summary::before { content: "+ "; }
+.cite[open] summary::before { content: "− "; }
+.cite summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+.cite pre {
+  margin: 6px 0 0;
+  padding: 10px 12px;
+  overflow-x: auto;
+  border: 1px solid var(--faint);
+  color: var(--text);
+  font: inherit;
+  line-height: 1.5;
+  user-select: all;
+}
+
 /* Skills */
 .skills {
   display: grid;
@@ -148,24 +194,24 @@ li::before {
 }
 .skills dt, .skills dd {
   margin: 0;
-  padding: 10px 0;
+  padding: 7px 0;
   border-bottom: 1px solid var(--faint);
 }
 .skills dt { color: var(--accent); font-size: 14px; font-weight: 700; padding-right: 16px; }
 
 footer {
-  margin-top: 64px;
-  padding-bottom: 48px;
+  margin-top: 32px;
+  padding-bottom: 28px;
   font-size: 13px;
   color: var(--muted);
 }
 footer p { padding-top: 16px; border-top: 1px solid var(--faint); }
 
 @media (max-width: 640px) {
-  main { padding-top: 40px; }
+  main { padding-top: 28px; }
   h1 { font-size: 34px; }
   .meta { flex-direction: column; }
-  section { margin-top: 40px; }
+  section { margin-top: 22px; }
   .skills { grid-template-columns: 1fr; }
   .skills dt { padding-bottom: 0; border-bottom: 0; }
   .skills dd { padding-top: 2px; }
@@ -186,5 +232,6 @@ footer p { padding-top: 16px; border-top: 1px solid var(--faint); }
   .entry { break-inside: avoid; }
   .entry + .entry { margin-top: 10pt; }
   a { text-decoration: none; }
-  footer { display: none; }
+  footer, .cite { display: none; }
+  .status::before { animation: none; }
 }
