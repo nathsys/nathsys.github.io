@@ -206,30 +206,6 @@ li::before {
   background: var(--accent);
 }
 
-/* Citation: a native disclosure, so it works without JavaScript. */
-.cite { margin-top: 8px; font-size: 13px; }
-.cite summary {
-  display: inline-block;
-  cursor: pointer;
-  color: var(--accent);
-  font-weight: 700;
-  list-style: none;
-}
-.cite summary::-webkit-details-marker { display: none; }
-.cite summary::before { content: "+ "; }
-.cite[open] summary::before { content: "− "; }
-.cite summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
-.cite pre {
-  margin: 6px 0 0;
-  padding: 10px 12px;
-  overflow-x: auto;
-  border: 1px solid var(--faint);
-  color: var(--text);
-  font: inherit;
-  line-height: 1.5;
-  user-select: all;
-}
-
 /* Skills */
 .skills {
   display: grid;
@@ -246,9 +222,9 @@ li::before {
 /* GitHub stats, written in at deploy time by scripts/github_stats.py */
 .stats {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, max-content);
   align-items: end;
-  gap: 16px;
+  gap: 16px 56px;
   margin: 0;
 }
 .stats dt { font-size: 13px; color: var(--muted); }
@@ -307,6 +283,7 @@ footer p { padding-top: 16px; border-top: 1px solid var(--faint); }
   .skills { grid-template-columns: 1fr; }
   .skills dt { padding-bottom: 0; border-bottom: 0; }
   .skills dd { padding-top: 2px; }
+  .stats { grid-template-columns: 1fr 1fr; column-gap: 16px; }
   .stats dd { font-size: 21px; }
   .lang { grid-template-columns: 90px 1fr 50px; }
 }
@@ -326,6 +303,6 @@ footer p { padding-top: 16px; border-top: 1px solid var(--faint); }
   .entry { break-inside: avoid; }
   .entry + .entry { margin-top: 10pt; }
   a { text-decoration: none; }
-  footer, .cite, .scope, .github { display: none; }
+  footer, .scope, .github { display: none; }
   .status::before { animation: none; }
 }

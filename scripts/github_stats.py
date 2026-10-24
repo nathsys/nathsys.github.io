@@ -53,7 +53,6 @@ def fetch(token):
     cal = cal["data"]["user"]["contributionsCollection"]["contributionCalendar"]
     return {
         "repos": len(repos),
-        "stars": sum(r["stargazers_count"] for r in repos),
         "languages": languages,
         "total": cal["totalContributions"],
         "weeks": [w["contributionDays"] for w in cal["weeks"]],
@@ -119,7 +118,6 @@ def render(s, today):
       <dl class="stats">
         <div><dt>Contributions, past year</dt><dd>{s['total']:,}</dd></div>
         <div><dt>Public repositories</dt><dd>{s['repos']}</dd></div>
-        <div><dt>Stars</dt><dd>{s['stars']}</dd></div>
       </dl>
       <div class="heatmap-wrap">
         {heatmap(s['weeks'])}
@@ -148,8 +146,7 @@ def main(page):
         sys.exit(f"github_stats: markers not found in {page}")
     text = block.sub(lambda _: render(stats, dt.date.today()), text)
     open(page, "w", encoding="utf-8").write(text)
-    print(f"github_stats: {stats['total']} contributions, {stats['repos']} repos, "
-          f"{stats['stars']} stars")
+    print(f"github_stats: {stats['total']} contributions, {stats['repos']} repos")
 
 
 if __name__ == "__main__":
