@@ -20,7 +20,7 @@
   --faint: #d1d9e0;
   --accent: #2a453d;
   --grid: rgba(31, 35, 40, 0.055);
-  --beam: 0.12;
+  --beam: 0.08;
   color-scheme: light;
 }
 
@@ -33,7 +33,7 @@
     --faint: #30363d;
     --accent: #80b2a3;
     --grid: rgba(230, 237, 243, 0.045);
-    --beam: 0.16;
+    --beam: 0.11;
     color-scheme: dark;
   }
 }
