@@ -1,9 +1,12 @@
-# Publishes the public/ folder to GitHub Pages on every push to main.
+# Publishes the public/ folder to GitHub Pages on every push to main, and once a
+# day so the GitHub stats on the page stay current.
 name: Deploy site
 
 on:
   push:
     branches: [main]
+  schedule:
+    - cron: "23 4 * * *"
   workflow_dispatch:
 
 permissions:
@@ -23,6 +26,10 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v5
+      - name: Refresh GitHub stats
+        run: python3 scripts/github_stats.py public/index.html
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
       - uses: actions/upload-pages-artifact@v4
         with:
           path: public
