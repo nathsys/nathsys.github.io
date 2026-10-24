@@ -20,15 +20,10 @@ SKIP_REPOS = {"nathsys.github.io"}  # this site's own HTML/CSS would skew the la
 TOP_LANGUAGES = 5
 START, END = "<!-- github-stats:start -->", "<!-- github-stats:end -->"
 
-CELL, GAP, TOP = 10, 3, 16  # heatmap geometry, in SVG user units
-LEVELS = {"NONE": 0, "FIRST_QUARTILE": 1, "SECOND_QUARTILE": 2,
-          "THIRD_QUARTILE": 3, "FOURTH_QUARTILE": 4}
 
-
-def api(path, token, body=None):
+def api(path, token):
     req = urllib.request.Request(
         "https://api.github.com/" + path,
-        data=json.dumps(body).encode() if body else None,
         headers={"Authorization": f"Bearer {token}",
                  "Accept": "application/vnd.github+json",
                  "User-Agent": f"{USER}-site-stats"},
@@ -46,53 +41,7 @@ def fetch(token):
             continue
         for lang, size in api(f"repos/{USER}/{r['name']}/languages", token).items():
             languages[lang] = languages.get(lang, 0) + size
-    query = """query($login: String!) { user(login: $login) { contributionsCollection {
-      contributionCalendar { totalContributions
-        weeks { contributionDays { date contributionCount contributionLevel } } } } } }"""
-    cal = api("graphql", token, {"query": query, "variables": {"login": USER}})
-    cal = cal["data"]["user"]["contributionsCollection"]["contributionCalendar"]
-    return {
-        "repos": len(repos),
-        "languages": languages,
-        "total": cal["totalContributions"],
-        "weeks": [w["contributionDays"] for w in cal["weeks"]],
-    }
-
-
-def day_label(iso):
-    d = dt.date.fromisoformat(iso)
-    return f"{d.day} {d:%b %Y}"
-
-
-def heatmap(weeks):
-    width = len(weeks) * (CELL + GAP) - GAP
-    height = TOP + 7 * (CELL + GAP) - GAP
-    out = [f'<svg class="heatmap" viewBox="0 0 {width} {height}" role="img" '
-           f'aria-label="Contributions per day over the past year">']
-    # Label each month above the first week that starts in it, dropping labels
-    # that would collide with the next one or run off the right edge.
-    starts, prev = [], None
-    for col, days in enumerate(weeks):
-        month = dt.date.fromisoformat(days[0]["date"]).month
-        if month != prev:
-            starts.append((col, month))
-            prev = month
-    if len(starts) > 1 and starts[1][0] - starts[0][0] < 3:
-        starts.pop(0)
-    for col, month in starts:
-        if col <= len(weeks) - 3:
-            out.append(f'<text x="{col * (CELL + GAP)}" y="10">{dt.date(2000, month, 1):%b}</text>')
-    for col, days in enumerate(weeks):
-        x = col * (CELL + GAP)
-        for d in days:
-            row = dt.date.fromisoformat(d["date"]).isoweekday() % 7  # Sunday first
-            n = d["contributionCount"]
-            title = f'{n} contribution{"" if n == 1 else "s"} on {day_label(d["date"])}'
-            out.append(f'<rect class="l{LEVELS[d["contributionLevel"]]}" x="{x}" '
-                       f'y="{TOP + row * (CELL + GAP)}" width="{CELL}" height="{CELL}" rx="2">'
-                       f'<title>{title}</title></rect>')
-    out.append("</svg>")
-    return "".join(out)
+    return {"repos": len(repos), "languages": languages}
 
 
 def language_rows(languages):
@@ -116,18 +65,13 @@ def language_rows(languages):
 def render(s, today):
     return f"""{START}
       <dl class="stats">
-        <div><dt>Contributions, past year</dt><dd>{s['total']:,}</dd></div>
         <div><dt>Public repositories</dt><dd>{s['repos']}</dd></div>
       </dl>
-      <div class="heatmap-wrap">
-        {heatmap(s['weeks'])}
-        <p class="scale" aria-hidden="true">Less <i class="l0"></i><i class="l1"></i><i class="l2"></i><i class="l3"></i><i class="l4"></i> More</p>
-      </div>
       <h3 class="langs-title">Languages <span class="dim">by code size, across my repositories</span></h3>
       <div class="langs">
 {language_rows(s['languages'])}
       </div>
-      <p class="updated">From the GitHub API, updated {day_label(today.isoformat())}.</p>
+      <p class="updated">From the GitHub API, updated {today.day} {today:%b %Y}.</p>
       {END}"""
 
 
@@ -146,7 +90,7 @@ def main(page):
         sys.exit(f"github_stats: markers not found in {page}")
     text = block.sub(lambda _: render(stats, dt.date.today()), text)
     open(page, "w", encoding="utf-8").write(text)
-    print(f"github_stats: {stats['total']} contributions, {stats['repos']} repos")
+    print(f"github_stats: {stats['repos']} repos, {len(stats['languages'])} languages")
 
 
 if __name__ == "__main__":
