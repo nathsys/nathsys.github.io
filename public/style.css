@@ -187,6 +187,7 @@ h3 .dim { font-size: 14px; }
 .when { font-size: 13px; color: var(--muted); white-space: nowrap; }
 .sub, .tags { margin-top: 4px; font-size: 14px; color: var(--muted); }
 .dim { color: var(--muted); font-weight: 400; }
+.sub .dim { white-space: nowrap; }
 
 ul { list-style: none; margin: 8px 0 0; padding: 0; }
 li { position: relative; padding-left: 22px; }
