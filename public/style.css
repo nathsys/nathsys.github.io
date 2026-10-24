@@ -1,0 +1,190 @@
+/* Lilex, SIL Open Font License 1.1 (fonts/OFL.txt) */
+@font-face {
+  font-family: "Lilex";
+  src: url("/fonts/lilex-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Lilex";
+  src: url("/fonts/lilex-bold.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+
+:root {
+  --bg: #ffffff;
+  --text: #1f2328;
+  --body: #31373d;
+  --muted: #59636e;
+  --faint: #d1d9e0;
+  --accent: #2a453d;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0d1117;
+    --text: #e6edf3;
+    --body: #c9d1d9;
+    --muted: #8b949e;
+    --faint: #30363d;
+    --accent: #80b2a3;
+    color-scheme: dark;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--body);
+  font: 400 15px/1.65 "Lilex", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+main, footer {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+main { padding-top: 64px; }
+
+::selection { background: var(--accent); color: var(--bg); }
+
+a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+a:hover { text-decoration-thickness: 2px; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+h1, h2, h3 { color: var(--text); font-weight: 700; margin: 0; }
+
+/* Intro */
+h1 {
+  font-size: 46px;
+  line-height: 1.1;
+  letter-spacing: -1px;
+}
+
+.subtitle {
+  margin: 14px 0 0;
+  font-size: 16px;
+  color: var(--muted);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px 24px;
+  margin-top: 26px;
+  padding-top: 14px;
+  border-top: 1px solid var(--faint);
+  font-size: 14px;
+}
+
+.links { display: flex; flex-wrap: wrap; gap: 6px 20px; }
+.links a { font-weight: 700; }
+
+.status { margin: 0; color: var(--text); }
+
+/* Sections */
+section { margin-top: 52px; }
+
+h2 {
+  font-size: 21px;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--faint);
+}
+
+p { margin: 0; }
+
+.entry + .entry { margin-top: 26px; }
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 2px 16px;
+}
+
+h3 { font-size: 17px; line-height: 1.4; }
+h3 .dim { font-size: 14px; }
+.name { text-decoration: none; }
+.name:hover { text-decoration: underline; }
+
+.when { font-size: 13px; color: var(--muted); white-space: nowrap; }
+.sub, .tags { margin-top: 4px; font-size: 14px; color: var(--muted); }
+.dim { color: var(--muted); font-weight: 400; }
+
+ul { list-style: none; margin: 12px 0 0; padding: 0; }
+li { position: relative; padding-left: 22px; }
+li + li { margin-top: 6px; }
+li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 0.62em;
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+}
+
+/* Skills */
+.skills {
+  display: grid;
+  grid-template-columns: 210px 1fr;
+  margin: 0;
+}
+.skills dt, .skills dd {
+  margin: 0;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--faint);
+}
+.skills dt { color: var(--accent); font-size: 14px; font-weight: 700; padding-right: 16px; }
+
+footer {
+  margin-top: 64px;
+  padding-bottom: 48px;
+  font-size: 13px;
+  color: var(--muted);
+}
+footer p { padding-top: 16px; border-top: 1px solid var(--faint); }
+
+@media (max-width: 640px) {
+  main { padding-top: 40px; }
+  h1 { font-size: 34px; }
+  .meta { flex-direction: column; }
+  section { margin-top: 40px; }
+  .skills { grid-template-columns: 1fr; }
+  .skills dt { padding-bottom: 0; border-bottom: 0; }
+  .skills dd { padding-top: 2px; }
+}
+
+/* Printing the page gives a clean one-column resume. */
+@media print {
+  @page { margin: 14mm 16mm; }
+  :root {
+    --bg: #ffffff; --text: #000000; --body: #1f2328; --muted: #4b5259;
+    --faint: #c8ced4; --accent: #2a453d;
+  }
+  body { font-size: 10pt; line-height: 1.5; }
+  main { padding-top: 0; max-width: none; }
+  h1 { font-size: 26pt; }
+  section { margin-top: 18pt; }
+  h2 { font-size: 13pt; margin-bottom: 8pt; padding-bottom: 4pt; break-after: avoid; }
+  .entry { break-inside: avoid; }
+  .entry + .entry { margin-top: 10pt; }
+  a { text-decoration: none; }
+  footer { display: none; }
+}
