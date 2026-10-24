@@ -106,6 +106,19 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-
 h1, h2, h3 { color: var(--text); font-weight: 700; margin: 0; }
 
 /* Intro */
+.intro-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+.photo {
+  flex: none;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px var(--faint);
+}
 h1 {
   font-size: 46px;
   line-height: 1.1;
@@ -252,6 +265,8 @@ footer p { padding-top: 16px; border-top: 1px solid var(--faint); }
 @media (max-width: 640px) {
   main { padding-top: 28px; }
   h1 { font-size: 34px; }
+  .intro-top { flex-direction: column-reverse; align-items: flex-start; gap: 16px; }
+  .photo { width: 72px; height: 72px; }
   .meta { flex-direction: column; }
   section { margin-top: 22px; }
   .skills { grid-template-columns: 1fr; }
